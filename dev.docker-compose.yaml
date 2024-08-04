@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+  tauri-vue:
+    build: .
+    volumes:
+      - .:/root/app
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    network_mode: host
+    ports:
+      - "1420:3000"
+    environment:
+      - DISPLAY=${DISPLAY}
+      - PULSE_SERVER=unix:/tmp/pulse
+    command: "bash -c 'yarn --cwd /root/app install && PANEL_BACKEND_URL=\"http://localhost:4000/\" yarn --cwd /root/app tauri dev -- -- -- --jwtToken=token --productId=1 && rm -r /root/app/node_modules'"
